@@ -1,9 +1,9 @@
 MtMoonB2FWildMons:
 	def_grass_wildmons 10 ; encounter rate
-	db  9, BITTYBAT
+	db  9, MAGIKARP
 	db  9, GEODUDE
 	db 10, BITTYBAT
-	db 10, GEODUDE
+	db 10, MAGIKARP
 	db 10, SANDSHREW
 	db 10, PARAS
 	db 11, SANDSHREW
