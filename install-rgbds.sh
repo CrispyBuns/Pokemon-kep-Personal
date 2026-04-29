@@ -8,7 +8,7 @@ BASE_URL="https://github.com/gbdev/rgbds/releases/download/v0.6.1"
 case "$(uname -s)" in
     Linux)               OS="Linux";   ARCHIVE="rgbds-0.6.1-linux-x86_64.tar.xz" ;;
     Darwin)              OS="macOS";   ARCHIVE="rgbds-0.6.1-macos-x86-64.zip" ;;
-    MINGW*|CYGWIN*|MSYS*)OS="Windows"; ARCHIVE="rgbds-0.6.1-win64.zip" ;;
+    MINGW64*|MINGW32*|CYGWIN*|MSYS*) OS="Windows"; ARCHIVE="rgbds-0.6.1-win64.zip" ;;
     *)                   echo "Error: Unsupported OS '$(uname -s)'."; exit 1 ;;
 esac
 
@@ -35,7 +35,12 @@ install_pkg() {
     case "$PM" in
         apt-get) sudo apt-get install -y "$pkg" ;;
         dnf)     sudo dnf install -y "$pkg" ;;
-        pacman)  sudo pacman -S --noconfirm "$pkg" ;;
+        pacman)
+            if [[ "$(uname -s)" == MINGW* || "$(uname -s)" == MSYS* ]]; then
+                pacman -S --noconfirm "$pkg"
+            else
+                sudo pacman -S --noconfirm "$pkg"
+            fi ;;
         zypper)  sudo zypper install -y "$pkg" ;;
         brew)    brew install "$pkg" ;;
     esac
@@ -44,7 +49,7 @@ install_pkg() {
 # Check for a dependency, offer to install if missing
 check_dep() {
     local cmd="$1"
-    local pkg="${2:-$1}"  # Optional package name override, defaults to cmd name
+    local pkg="${2:-$1}"
     if ! command -v "$cmd" >/dev/null 2>&1; then
         echo "Warning: '$cmd' is not installed."
         read -r -p "Install '$pkg' now? [y/N] " response
@@ -61,19 +66,6 @@ echo "Checking dependencies..."
 check_dep curl
 [[ "$ARCHIVE" == *.zip ]] && check_dep unzip || check_dep tar
 
-# Check RGBDS runtime dependencies (Linux only — macOS/Windows zips are self-contained)
-if [ "$OS" = "Linux" ]; then
-    check_dep rgbasm rgbds 2>/dev/null || true  # non-fatal, checked post-install below
-    for lib in libpng; do
-        if ! ldconfig -p 2>/dev/null | grep -q "$lib"; then
-            echo "Warning: RGBDS runtime dependency '$lib' may be missing."
-            read -r -p "Attempt to install '$lib-dev' now? [y/N] " response
-            [[ "$response" =~ ^[Yy]$ ]] && install_pkg "${lib}-dev" \
-                || echo "Warning: '$lib' missing — RGBDS binaries may not run."
-        fi
-    done
-fi
-
 mkdir -p "$RGBDS_DIR"
 
 [ ! -f "$ARCHIVE" ] \
@@ -88,12 +80,11 @@ esac
 
 rm -f "$ARCHIVE"
 
-# Verify the install by running rgbasm if it's on PATH or in the output dir
+# Verify the install by running rgbasm if found in the output dir
 RGBASM_BIN=$(find "$RGBDS_DIR" -name "rgbasm" | head -1)
 if [ -n "$RGBASM_BIN" ]; then
     if ! "$RGBASM_BIN" --version >/dev/null 2>&1; then
         echo "Warning: RGBDS was extracted but 'rgbasm' failed to run."
-        echo "You may be missing a runtime library (e.g. libpng). Check above warnings."
     fi
 fi
 
