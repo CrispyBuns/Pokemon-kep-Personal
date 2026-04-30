@@ -15,6 +15,8 @@ rom_obj := \
 	gfx/sprites.o \
 	gfx/tilesets.o
 
+.DEFAULT_GOAL := kep
+
 kep_obj        := $(rom_obj:.o=_kep.o)
 kep_debug_obj  := $(rom_obj:.o=_kep_debug.o)
 
