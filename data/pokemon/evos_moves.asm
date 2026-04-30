@@ -1960,7 +1960,6 @@ SnorlaxEvosMoves:
 
 MagikarpEvosMoves:
 ; Evolutions
-	db 16, WATER_GUN
 	db EV_LEVEL, 20, GYARADOS
 	db 0
 ; Learnset
