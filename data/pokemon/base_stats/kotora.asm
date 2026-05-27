@@ -4,13 +4,13 @@
 	;   hp  atk  def  spd  spc
 
 	db ELECTRIC, ELECTRIC ; type
-	db 180 ; catch rate
+	db 255 ; catch rate
 	db 88 ; base exp
 
 	INCBIN "gfx/pokemon/front/kotora.pic", 0, 1 ; sprite dimensions
 	dw KotoraPicFront, KotoraPicBack
 
-	db THUNDERSHOCK, TACKLE, NO_MOVE, NO_MOVE ; level 1 learnset
+	db THUNDERSHOCK, TACKLE, THUNDER_WAVE, NO_MOVE ; level 1 learnset
 	db GROWTH_SLOW ; growth rate
 
 	; tm/hm learnset

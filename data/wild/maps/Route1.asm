@@ -5,11 +5,11 @@ Route1WildMons:
 	db  3, COINPUR
 	db  3, PIDGEY
 	db  2, COINPUR
-	db  3, MAGIKARP
+	db  3, RATATTA
 	db  4, COINPUR
 	db  4, RATTATA
 	db  4, PIDGEY
-	db  5, MAGIKARP 
+	db  5, COINPUR 
 	end_grass_wildmons
 
 	def_water_wildmons 0 ; encounter rate
