@@ -47,40 +47,68 @@ Route1_TextPointers:
 	dw Route1Text3
 
 Route1Text1:
-	text_asm
-	CheckAndSetEvent EVENT_GOT_POTION_SAMPLE
-	jr nz, .got_item
-	ld hl, Route1ViridianMartSampleText
+        text_asm
+	CheckEvent EVENT_BOUGHT_MAGIKARP, 1
+	jp c, .alreadyBoughtMagikarp
+	ld hl, .Text1
 	call PrintText
-	lb bc, POTION, 1
-	call GiveItem
-	jr nc, .bag_full
-	ld hl, Route1Text_1cae8
+	ld a, MONEY_BOX
+	ld [wTextBoxID], a
+	call DisplayTextBoxID
+	call YesNoChoice
+	ld a, [wCurrentMenuItem]
+	and a
+	jp nz, .choseNo
+	ldh [hMoney], a
+	ldh [hMoney + 2], a
+	ld a, $5
+	ldh [hMoney + 1], a
+	call HasEnoughMoney
+	jr nc, .enoughMoney
+	ld hl, .NoMoneyText
+	jr .printText
+.enoughMoney
+	lb bc, MAGIKARP, 7
+	call GivePokemon
+	jr nc, .done
+	xor a
+	ld [wPriceTemp], a
+	ld [wPriceTemp + 2], a
+	ld a, $5
+	ld [wPriceTemp + 1], a
+	ld hl, wPriceTemp + 2
+	ld de, wPlayerMoney + 2
+	ld c, $3
+	predef SubBCDPredef
+	ld a, MONEY_BOX
+	ld [wTextBoxID], a
+	call DisplayTextBoxID
+	SetEvent EVENT_BOUGHT_MAGIKARP
 	jr .done
-.bag_full
-	ld hl, Route1Text_1caf3
-	jr .done
-.got_item
-	ld hl, Route1Text_1caee
+.choseNo
+	ld hl, .RefuseText
+	jr .printText
+.alreadyBoughtMagikarp
+	ld hl, .Text2
+.printText
+	call PrintText
 .done
-	call PrintText
 	jp TextScriptEnd
 
-Route1ViridianMartSampleText:
-	text_far _Route1ViridianMartSampleText
+.Text1
+	text_far _MagikarpSalesmanText1
 	text_end
 
-Route1Text_1cae8:
-	text_far _Route1Text_1cae8
-	sound_get_item_1
+.RefuseText
+	text_far _MagikarpSalesmanNoText
 	text_end
 
-Route1Text_1caee:
-	text_far _Route1Text_1caee
+.NoMoneyText
+	text_far _MagikarpSalesmanNoMoneyText
 	text_end
 
-Route1Text_1caf3:
-	text_far _Route1Text_1caf3
+.Text2
+	text_far _MagikarpSalesmanText2
 	text_end
 
 Route1Text2:
