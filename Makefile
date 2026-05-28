@@ -15,7 +15,7 @@ rom_obj := \
 	gfx/sprites.o \
 	gfx/tilesets.o
 
-.DEFAULT_GOAL := kep
+.DEFAULT_GOAL := personal
 
 kep_obj        := $(rom_obj:.o=_kep.o)
 kep_debug_obj  := $(rom_obj:.o=_kep_debug.o)
@@ -66,8 +66,8 @@ endif
 .PHONY: all red blue blue_debug clean tidy compare tools
 
 all: $(roms)
-kep:        Personal-Pokemon-Kanto-Expansion-Pak.gb
-kep_debug:  Personal-Pokemon-Kanto-Expansion-Pak-debug.gb
+personal:        Personal-Pokemon-Kanto-Expansion-Pak.gb
+personal_debug:  Personal-Pokemon-Kanto-Expansion-Pak-debug.gb
 
 clean: tidy
 	find gfx \
