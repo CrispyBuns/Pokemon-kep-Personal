@@ -1,6 +1,6 @@
 roms := \
-	kep.gb \
-	kep_debug.gb
+	Personal-Pokemon-Kanto-Expansion-Pak.gb \
+	Personal-Pokemon-Kanto-Expansion-Pak-debug.gb
 patches := \
 	kep.patch
 
@@ -66,8 +66,8 @@ endif
 .PHONY: all red blue blue_debug clean tidy compare tools
 
 all: $(roms)
-kep:        kep.gb
-kep_debug:  kep_debug.gb
+kep:        Personal-Pokemon-Kanto-Expansion-Pak.gb
+kep_debug:  Personal-Pokemon-Kanto-Expansion-Pak-debug.gb
 
 clean: tidy
 	find gfx \
@@ -95,6 +95,16 @@ compare: $(roms) $(patches)
 
 tools:
 	$(MAKE) -C tools/
+
+Personal-Pokemon-Kanto-Expansion-Pak.gb: kep.gb
+	cp kep.gb Personal-Pokemon-Kanto-Expansion-Pak.gb
+	cp kep.sym Personal-Pokemon-Kanto-Expansion-Pak.sym
+	cp kep.map Personal-Pokemon-Kanto-Expansion-Pak.map
+
+Personal-Pokemon-Kanto-Expansion-Pak-debug.gb: kep_debug.gb
+	cp kep_debug.gb Personal-Pokemon-Kanto-Expansion-Pak-debug.gb
+	cp kep_debug.sym Personal-Pokemon-Kanto-Expansion-Pak-debug.sym
+	cp kep_debug.map Personal-Pokemon-Kanto-Expansion-Pak-debug.map
 
 
 RGBASMFLAGS = -hL -Q8 -P includes.asm -Weverything -Wnumeric-string=2 -Wtruncation=1
