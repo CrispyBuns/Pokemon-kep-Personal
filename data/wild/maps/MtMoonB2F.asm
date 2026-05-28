@@ -1,6 +1,6 @@
 MtMoonB2FWildMons:
 	def_grass_wildmons 6 ; encounter rate
-	db  9, GEODUDE
+	db  9, GASTLY
 	db  9, GEODUDE
 	db 10, GASTLY
 	db 10, GEODUDE

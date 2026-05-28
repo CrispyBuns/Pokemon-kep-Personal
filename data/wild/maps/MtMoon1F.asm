@@ -10,7 +10,6 @@ MtMoon1FWildMons:
 	db  8, GASTLY
 	db 7, GEODUDE
 	db  8, GEODUDE
-        db 10, GASTLY
 	end_grass_wildmons
 
 	def_water_wildmons 0 ; encounter rate

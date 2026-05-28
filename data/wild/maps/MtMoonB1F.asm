@@ -9,8 +9,7 @@ MtMoonB1FWildMons:
 	db 10, BITTYBAT
 	db  9, SANDSHREW
 	db  9, GASTLY
-	db 10, SANDSHREW
-        db 10, GASTLY
+	db 10, GASTLY
 	end_grass_wildmons
 
 	def_water_wildmons 0 ; encounter rate
