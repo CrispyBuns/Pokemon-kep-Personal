@@ -14,7 +14,7 @@
 	db GROWTH_SLOW ; growth rate
 
 	; tm/hm learnset
-	tmhm DRAGON_RAGE, WATER_GUN, BIDE, BUBBLE_BEAM
+	tmhm DRAGON_RAGE, WATER_GUN, BIDE, BUBBLEBEAM
 	; end
 
 	db BANK(MagikarpPicFront)
