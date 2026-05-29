@@ -2,7 +2,7 @@ roms := \
 	Personal-Pokemon-Kanto-Expansion-Pak.gb \
 	Personal-Pokemon-Kanto-Expansion-Pak-debug.gb
 patches := \
-	kep.patch
+	Personal-Pokemon-Kanto-Expansion-Pak.patch
 
 rom_obj := \
 	audio.o \
@@ -17,8 +17,8 @@ rom_obj := \
 
 .DEFAULT_GOAL := personal
 
-kep_obj        := $(rom_obj:.o=_kep.o)
-kep_debug_obj  := $(rom_obj:.o=_kep_debug.o)
+Personal-Pokemon-Kanto-Expansion-Pak_obj        := $(rom_obj:.o=_kep.o)
+Personal-Pokemon-Kanto-Expansion-Pak_debug_obj  := $(rom_obj:.o=_kep_debug.o)
 
 ### Build tools
 
@@ -85,8 +85,8 @@ tidy:
 	      $(patches:.patch=_vc.sym) \
 	      $(patches:.patch=_vc.map) \
 	      $(patches:%.patch=vc/%.constants.sym) \
-	      $(kep_obj) \
-		  $(kep_debug_obj) \
+	      $(Personal-Pokemon-Kanto-Expansion-Pak_obj) \
+		  $(Personal-Pokemon-Kanto-Expansion-Pak_debug_obj) \
 	      rgbdscheck.o
 	$(MAKE) clean -C tools/
 
@@ -96,16 +96,6 @@ compare: $(roms) $(patches)
 tools:
 	$(MAKE) -C tools/
 
-Personal-Pokemon-Kanto-Expansion-Pak.gb: kep.gb
-	cp kep.gb Personal-Pokemon-Kanto-Expansion-Pak.gb
-	cp kep.sym Personal-Pokemon-Kanto-Expansion-Pak.sym
-	cp kep.map Personal-Pokemon-Kanto-Expansion-Pak.map
-
-Personal-Pokemon-Kanto-Expansion-Pak-debug.gb: kep_debug.gb
-	cp kep_debug.gb Personal-Pokemon-Kanto-Expansion-Pak-debug.gb
-	cp kep_debug.sym Personal-Pokemon-Kanto-Expansion-Pak-debug.sym
-	cp kep_debug.map Personal-Pokemon-Kanto-Expansion-Pak-debug.map
-
 
 RGBASMFLAGS = -hL -Q8 -P includes.asm -Weverything -Wnumeric-string=2 -Wtruncation=1
 # Create a sym/map for debug purposes if `make` run with `DEBUG=1`
@@ -113,8 +103,8 @@ ifeq ($(DEBUG),1)
 RGBASMFLAGS += -E
 endif
 
-$(kep_obj):        RGBASMFLAGS += -D _KEP
-$(kep_debug_obj):  RGBASMFLAGS += -D _KEP -D _DEBUG
+$(Personal-Pokemon-Kanto-Expansion-Pak_obj):        RGBASMFLAGS += -D _KEP
+$(Personal-Pokemon-Kanto-Expansion-Pak_debug_obj):  RGBASMFLAGS += -D _KEP -D _DEBUG
 
 %.patch: vc/%.constants.sym %_vc.gb %.gb vc/%.patch.template
 	tools/make_patch $*_vc.sym $^ $@
@@ -138,8 +128,8 @@ $1: $2 $$(shell tools/scan_includes $2) $(preinclude_deps) | rgbdscheck.o
 endef
 
 # Dependencies for objects (drop _red and _blue from asm file basenames)
-$(foreach obj, $(kep_obj), $(eval $(call DEP,$(obj),$(obj:_kep.o=.asm))))
-$(foreach obj, $(kep_debug_obj), $(eval $(call DEP,$(obj),$(obj:_kep_debug.o=.asm))))
+$(foreach obj, $(Personal-Pokemon-Kanto-Expansion-Pak_obj), $(eval $(call DEP,$(obj),$(obj:_kep.o=.asm))))
+$(foreach obj, $(Personal-Pokemon-Kanto-Expansion-Pak_debug_obj), $(eval $(call DEP,$(obj),$(obj:_kep_debug.o=.asm))))
 
 # Dependencies for VC files that need to run scan_includes
 %.constants.sym: %.constants.asm $(shell tools/scan_includes %.constants.asm) $(preinclude_deps) | rgbdscheck.o
@@ -151,11 +141,11 @@ endif
 %.asm: ;
 
 
-kep_pad        = 0xff
-kep_debug_pad  = 0xff
+Personal-Pokemon-Kanto-Expansion-Pak_pad        = 0xff
+Personal-Pokemon-Kanto-Expansion-Pak_debug_pad  = 0xff
 
-kep_opt        = -jsv -n 0 -k 01 -l 0x33 -m 0x13 -r 04 -t "PKMN: PERSONAL"
-kep_debug_opt  = -jsv -n 0 -k 01 -l 0x33 -m 0x13 -r 04 -t "PKMN: EXPN. PAK"
+Personal-Pokemon-Kanto-Expansion-Pak_opt        = -jsv -n 0 -k 01 -l 0x33 -m 0x13 -r 04 -t "PKMN: PERSONAL"
+Personal-Pokemon-Kanto-Expansion-Pak_debug_opt  = -jsv -n 0 -k 01 -l 0x33 -m 0x13 -r 04 -t "PKMN: EXPN. PAK"
 
 %.gb: $$(%_obj) layout.link
 	$(RGBLINK) -p $($*_pad) -d -m $*.map -n $*.sym -l layout.link -o $@ $(filter %.o,$^)
